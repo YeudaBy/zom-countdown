@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="index.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            direction: rtl;
+            text-align: center;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        h2 {
+             margin: 0;
+             padding-top: 2rem;
+        }
+
+        #countdown {
+            display: flex;
+            flex-grow: 1;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem;
+            direction: ltr;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%,
+                    rgb(211, 211, 211) 50%,
+                    rgba(255, 255, 255, 0.25) 100%);
+            /* box-shadow: 0 0 10px 8px rgba(0, 0, 0, 0.1); */
+        }
+
+        #countdown>div {
+            margin: 0 10px;
+            font-size: 5rem;
+            font-family: "Kode Mono", monospace;
+            font-optical-sizing: auto;
+            font-weight: 500;
+            font-style: normal;
+            direction: ltr;
+        }
+
+        @media screen and (max-width: 600px) {
+            #countdown>div {
+                font-size: 3rem;
+            }
+            
+        }
+
+        #end {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        footer {
+            padding: 10px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>
+        עוד כמה זמן אפשר לאכול? 🙈
+    </h1>
+    <h4>
+        צום י״ז בתמוז תשפ״ד, לאופק תל אביב ☕️
+    </h4>
+
+    <div id="countdown">
+        <div id="days"></div>
+        <div id="hours"></div>
+        <div id="minutes"></div>
+        <div id="seconds"></div>
+    </div>
+
+    <div id="end" style="display: none;">
+        <h1>זמן יציאת הצום!</h1>
+        <h4>
+            ׳לך אכול בשמחה לחמך׳ 😋
+        </h4>
+    </div>
+
+    <footer>
+        <a href="https://yeudaby.com">yeudaby.com</a>
+    </footer>
+
+    <script>
+        const now = new Date();
+        init(
+            now.setHours(20, 6),
+            false
+        )
+    </script>
+</body>
+
+</html>
