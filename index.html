@@ -25,6 +25,18 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        /* Light overlay for readability */
+        body::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.6);
+            pointer-events: none;
         }
 
         h2 {
@@ -55,11 +67,66 @@
             direction: ltr;
         }
 
+        /* Analog clock container */
+        #analog-clock {
+            width: 220px;
+            height: 220px;
+            border: 8px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+            margin-top: 1rem;
+        }
+
+        #analog-clock .hand {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform-origin: bottom;
+            transform: translate(-50%, -100%) rotate(0deg);
+            background: #000;
+            border-radius: 2px;
+        }
+
+        #analog-clock .hour {
+            width: 6px;
+            height: 60px;
+        }
+
+        #analog-clock .minute {
+            width: 4px;
+            height: 80px;
+        }
+
+        #analog-clock .second {
+            width: 2px;
+            height: 90px;
+            background: #e94545;
+        }
+
+        /* Mobile adjustments */
         @media screen and (max-width: 600px) {
             #countdown>div {
                 font-size: 3rem;
             }
             
+            #analog-clock {
+                width: 140px;
+                height: 140px;
+                margin-top: 0.5rem;
+            }
+
+            #analog-clock .hour {
+                height: 35px;
+            }
+
+            #analog-clock .minute {
+                height: 55px;
+            }
+
+            #analog-clock .second {
+                height: 65px;
+            }
         }
 
         #end {
@@ -94,6 +161,12 @@
         <div id="seconds"></div>
     </div>
 
+    <div id="analog-clock">
+        <div id="hour-hand" class="hand hour"></div>
+        <div id="minute-hand" class="hand minute"></div>
+        <div id="second-hand" class="hand second"></div>
+    </div>
+
     <div id="end" style="display: none;">
         <h1>זמן יציאת הצום!</h1>
         <h4>
@@ -111,6 +184,10 @@
             now.setHours(20, 6),
             false
         )
+
+        // start analog clock rotation & background slideshow
+        initAnalogClock();
+        startBackgroundCycle();
     </script>
 </body>
 
