@@ -1,117 +1,442 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>י״ז בתמוז תשפ״ד</title>
-
-    <script src="index.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet">
-
+    <title>ספירה לאחור לצאת הצום - י"ז בתמוז</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap');
+        
         * {
-            direction: rtl;
-            text-align: center;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Heebo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            justify-content: center;
+            color: white;
+            overflow-x: hidden;
         }
 
-        h2 {
-             margin: 0;
-             padding-top: 2rem;
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
         }
 
-        #countdown {
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .countdown-container {
             display: flex;
-            flex-grow: 1;
             justify-content: center;
-            align-items: center;
-            margin: 2rem;
-            direction: ltr;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%,
-                    rgb(211, 211, 211) 50%,
-                    rgba(255, 255, 255, 0.25) 100%);
-            /* box-shadow: 0 0 10px 8px rgba(0, 0, 0, 0.1); */
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
         }
 
-        #countdown>div {
-            margin: 0 10px;
-            font-size: 5rem;
-            font-family: "Kode Mono", monospace;
-            font-optical-sizing: auto;
-            font-weight: 500;
-            font-style: normal;
-            direction: ltr;
+        .time-unit {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            min-width: 120px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            animation: slideInUp 0.8s ease-out;
         }
 
-        @media screen and (max-width: 600px) {
-            #countdown>div {
-                font-size: 3rem;
+        .time-unit:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .time-unit:nth-child(1) { animation-delay: 0.1s; }
+        .time-unit:nth-child(2) { animation-delay: 0.2s; }
+        .time-unit:nth-child(3) { animation-delay: 0.3s; }
+        .time-unit:nth-child(4) { animation-delay: 0.4s; }
+
+        .time-number {
+            font-size: 3rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .time-label {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .food-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .food-icon {
+            font-size: 3rem;
+            animation: bounce 2s infinite;
+            transition: transform 0.3s ease;
+        }
+
+        .food-icon:hover {
+            transform: scale(1.2);
+        }
+
+        .food-icon:nth-child(1) { animation-delay: 0s; }
+        .food-icon:nth-child(2) { animation-delay: 0.3s; }
+        .food-icon:nth-child(3) { animation-delay: 0.6s; }
+        .food-icon:nth-child(4) { animation-delay: 0.9s; }
+        .food-icon:nth-child(5) { animation-delay: 1.2s; }
+
+        .message {
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            opacity: 0.9;
+            animation: fadeIn 2s ease-out 1s both;
+        }
+
+        .clock-animation {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .clock-hand {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: 50% 0%;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 2px;
+        }
+
+        .hour-hand {
+            width: 4px;
+            height: 60px;
+            margin-left: -2px;
+            margin-top: -60px;
+            animation: rotate 43200s linear infinite;
+        }
+
+        .minute-hand {
+            width: 2px;
+            height: 80px;
+            margin-left: -1px;
+            margin-top: -80px;
+            animation: rotate 3600s linear infinite;
+        }
+
+        .second-hand {
+            width: 1px;
+            height: 90px;
+            margin-left: -0.5px;
+            margin-top: -90px;
+            animation: rotate 60s linear infinite;
+            background: rgba(255, 100, 100, 0.6);
+        }
+
+        .finished {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #4CAF50;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: celebrationBounce 1s ease-out infinite alternate;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes celebrationBounce {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+            animation: pulse 1s ease-in-out;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
             }
             
-        }
-
-        #end {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        footer {
-            padding: 10px;
-            font-size: 0.8rem;
-            color: #666;
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .countdown-container {
+                gap: 1rem;
+            }
+            
+            .time-unit {
+                padding: 1.5rem 1rem;
+                min-width: 100px;
+            }
+            
+            .time-number {
+                font-size: 2.5rem;
+            }
+            
+            .food-icon {
+                font-size: 2.5rem;
+            }
         }
     </style>
 </head>
-
 <body>
+    <div class="container">
+        <h1 class="title">ספירה לאחור לצאת הצום</h1>
+        <p class="subtitle">צום י"ז בתמוז מסתיים בשעה 20:11</p>
+        
+        <div class="countdown-container" id="countdown">
+            <div class="time-unit">
+                <span class="time-number" id="hours">00</span>
+                <span class="time-label">שעות</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-number" id="minutes">00</span>
+                <span class="time-label">דקות</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-number" id="seconds">00</span>
+                <span class="time-label">שניות</span>
+            </div>
+        </div>
 
-    <h2>
-        עוד כמה זמן אפשר לאכול? 🙈
-    </h1>
-    <h4>
-        צום י״ז בתמוז תשפ״ד, לאופק תל אביב ☕️
-    </h4>
+        <div class="food-icons">
+            <div class="food-icon">🍞</div>
+            <div class="food-icon">🥤</div>
+            <div class="food-icon">🍎</div>
+            <div class="food-icon">🥙</div>
+            <div class="food-icon">☕</div>
+        </div>
 
-    <div id="countdown">
-        <div id="days"></div>
-        <div id="hours"></div>
-        <div id="minutes"></div>
-        <div id="seconds"></div>
+        <div class="message" id="message">
+            בקרוב נוכל לאכול ולשתות!
+        </div>
     </div>
 
-    <div id="end" style="display: none;">
-        <h1>זמן יציאת הצום!</h1>
-        <h4>
-            ׳לך אכול בשמחה לחמך׳ 😋
-        </h4>
+    <!-- Clock animation background -->
+    <div class="clock-animation">
+        <div class="clock-hand hour-hand"></div>
+        <div class="clock-hand minute-hand"></div>
+        <div class="clock-hand second-hand"></div>
     </div>
-
-    <footer>
-        <a href="https://yeudaby.com">yeudaby.com</a>
-    </footer>
 
     <script>
-        const now = new Date();
-        init(
-            now.setHours(20, 6),
-            false
-        )
+        // Set target date and time (today at 20:11)
+        const today = new Date();
+        const targetTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 20, 11, 0);
+        
+        // If the target time has already passed today, set it for tomorrow
+        if (new Date() > targetTime) {
+            targetTime.setDate(targetTime.getDate() + 1);
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const timeLeft = targetTime - now;
+
+            if (timeLeft <= 0) {
+                document.getElementById('countdown').innerHTML = '<div class="finished">🎉 הצום הסתיים! 🎉</div>';
+                document.getElementById('message').innerHTML = 'גמר צום טוב! זמן לאכול ולשתות!';
+                return;
+            }
+
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            const hoursElement = document.getElementById('hours');
+            const minutesElement = document.getElementById('minutes');
+            const secondsElement = document.getElementById('seconds');
+
+            // Add pulse animation when number changes
+            if (hoursElement.textContent !== hours.toString().padStart(2, '0')) {
+                hoursElement.classList.add('pulse');
+                setTimeout(() => hoursElement.classList.remove('pulse'), 1000);
+            }
+            if (minutesElement.textContent !== minutes.toString().padStart(2, '0')) {
+                minutesElement.classList.add('pulse');
+                setTimeout(() => minutesElement.classList.remove('pulse'), 1000);
+            }
+            if (secondsElement.textContent !== seconds.toString().padStart(2, '0')) {
+                secondsElement.classList.add('pulse');
+                setTimeout(() => secondsElement.classList.remove('pulse'), 1000);
+            }
+
+            hoursElement.textContent = hours.toString().padStart(2, '0');
+            minutesElement.textContent = minutes.toString().padStart(2, '0');
+            secondsElement.textContent = seconds.toString().padStart(2, '0');
+
+            // Update message based on time left
+            if (hours === 0 && minutes < 30) {
+                document.getElementById('message').innerHTML = 'כמעט שם! מכינים את השולחן... 🍽️';
+            } else if (hours === 0 && minutes < 60) {
+                document.getElementById('message').innerHTML = 'עוד מעט! מתחילים לחשוב על אוכל... 🤤';
+            } else if (hours < 2) {
+                document.getElementById('message').innerHTML = 'עוד שעה-שעתיים ונוכל לאכול!';
+            }
+        }
+
+        // Create floating particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 6000);
+        }
+
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Create particles every 2 seconds
+        setInterval(createParticle, 2000);
+
+        // Add some interactivity to food icons
+        document.querySelectorAll('.food-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                this.style.transform = 'scale(1.5) rotate(360deg)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 500);
+            });
+        });
     </script>
 </body>
-
 </html>
