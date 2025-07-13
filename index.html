@@ -9,95 +9,426 @@
     <script src="index.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
         * {
             direction: rtl;
             text-align: center;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Heebo', Arial, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Food Background Images */
+        .food-bg {
+            position: absolute;
+            opacity: 0.1;
+            z-index: -1;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .food-bg:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            width: 120px;
+            height: 120px;
+            background: url('https://api.iconify.design/noto:cut-of-meat.svg') no-repeat center;
+            background-size: contain;
+            animation-delay: 0s;
+        }
+
+        .food-bg:nth-child(2) {
+            top: 70%;
+            right: 10%;
+            width: 100px;
+            height: 100px;
+            background: url('https://api.iconify.design/noto:ice-cream.svg') no-repeat center;
+            background-size: contain;
+            animation-delay: 3s;
+        }
+
+        .food-bg:nth-child(3) {
+            bottom: 20%;
+            left: 15%;
+            width: 110px;
+            height: 110px;
+            background: url('https://api.iconify.design/noto:soft-ice-cream.svg') no-repeat center;
+            background-size: contain;
+            animation-delay: 6s;
+        }
+
+        .food-bg:nth-child(4) {
+            top: 40%;
+            right: 5%;
+            width: 130px;
+            height: 130px;
+            background: url('https://api.iconify.design/noto:meat-on-bone.svg') no-repeat center;
+            background-size: contain;
+            animation-delay: 9s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        h1, h2, h3, h4 {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin: 0.5rem 0;
         }
 
         h2 {
-             margin: 0;
-             padding-top: 2rem;
+            font-size: 2rem;
+            font-weight: 700;
         }
 
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        /* Clock Container */
+        .clock-container {
+            position: relative;
+            width: min(80vw, 300px);
+            height: min(80vw, 300px);
+            margin: 2rem auto;
+        }
+
+        /* Analog Clock */
+        .analog-clock {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .clock-face {
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            top: 5%;
+            left: 5%;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff 70%, #f0f0f0 100%);
+        }
+
+        /* Clock Numbers */
+        .clock-number {
+            position: absolute;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            transform: translate(-50%, -50%);
+        }
+
+        .clock-number:nth-child(1) { top: 15%; left: 50%; }
+        .clock-number:nth-child(2) { top: 50%; right: 15%; left: auto; transform: translate(50%, -50%); }
+        .clock-number:nth-child(3) { bottom: 15%; left: 50%; top: auto; transform: translate(-50%, 50%); }
+        .clock-number:nth-child(4) { top: 50%; left: 15%; }
+
+        /* Clock Hands */
+        .hand {
+            position: absolute;
+            left: 50%;
+            bottom: 50%;
+            transform-origin: 50% 100%;
+            border-radius: 10px;
+            transform: translateX(-50%);
+        }
+
+        .hour-hand {
+            width: 6px;
+            height: 30%;
+            background: #333;
+            animation: rotate 43200s linear infinite;
+        }
+
+        .minute-hand {
+            width: 4px;
+            height: 40%;
+            background: #666;
+            animation: rotate 3600s linear infinite;
+        }
+
+        .second-hand {
+            width: 2px;
+            height: 45%;
+            background: #e74c3c;
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: translateX(-50%) rotate(0deg);
+            }
+            to {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+
+        .clock-center {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #333;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        /* Digital Countdown */
         #countdown {
             display: flex;
-            flex-grow: 1;
             justify-content: center;
             align-items: center;
-            margin: 2rem;
-            direction: ltr;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%,
-                    rgb(211, 211, 211) 50%,
-                    rgba(255, 255, 255, 0.25) 100%);
-            /* box-shadow: 0 0 10px 8px rgba(0, 0, 0, 0.1); */
+            gap: 0.5rem;
+            margin: 1rem 0;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
 
-        #countdown>div {
-            margin: 0 10px;
-            font-size: 5rem;
-            font-family: "Kode Mono", monospace;
-            font-optical-sizing: auto;
-            font-weight: 500;
-            font-style: normal;
-            direction: ltr;
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
         }
 
-        @media screen and (max-width: 600px) {
-            #countdown>div {
-                font-size: 3rem;
+        .time-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .time-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.3rem;
+        }
+
+        .separator {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            animation: blink 1s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
             }
-            
+            50% {
+                opacity: 0.3;
+            }
         }
 
         #end {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #end h1 {
+            font-size: 2.5rem;
+            color: #4ade80;
+            margin-bottom: 1rem;
         }
 
         footer {
             padding: 10px;
             font-size: 0.8rem;
-            color: #666;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: auto;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Food emojis decoration */
+        .food-decoration {
+            font-size: 2rem;
+            margin: 0 0.5rem;
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Mobile Styles */
+        @media screen and (max-width: 600px) {
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h4 {
+                font-size: 1rem;
+            }
+
+            .clock-container {
+                width: min(70vw, 250px);
+                height: min(70vw, 250px);
+            }
+
+            .time-value {
+                font-size: 2rem;
+            }
+
+            .separator {
+                font-size: 1.8rem;
+            }
+
+            .time-label {
+                font-size: 0.7rem;
+            }
+
+            #countdown {
+                padding: 1rem;
+                gap: 0.3rem;
+            }
+
+            .food-bg {
+                width: 80px !important;
+                height: 80px !important;
+            }
+
+            #end h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media screen and (max-width: 400px) {
+            .time-value {
+                font-size: 1.8rem;
+            }
+
+            .clock-container {
+                width: min(60vw, 200px);
+                height: min(60vw, 200px);
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- Food Background Elements -->
+    <div class="food-bg"></div>
+    <div class="food-bg"></div>
+    <div class="food-bg"></div>
+    <div class="food-bg"></div>
 
     <h2>
-        עוד כמה זמן אפשר לאכול? 🙈
-    </h1>
+        <span class="food-decoration">🥩</span>
+        ספירה לאחור לצאת הצום
+        <span class="food-decoration">🍦</span>
+    </h2>
     <h4>
-        צום י״ז בתמוז תשפ״ד, לאופק תל אביב ☕️
+        צום י״ז בתמוז תשפ״ד, לאופק תל אביב
     </h4>
 
+    <!-- Analog Clock -->
+    <div class="clock-container">
+        <div class="analog-clock">
+            <div class="clock-face">
+                <div class="clock-number">12</div>
+                <div class="clock-number">3</div>
+                <div class="clock-number">6</div>
+                <div class="clock-number">9</div>
+                <div class="hand hour-hand"></div>
+                <div class="hand minute-hand"></div>
+                <div class="hand second-hand"></div>
+                <div class="clock-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Digital Countdown -->
     <div id="countdown">
-        <div id="days"></div>
-        <div id="hours"></div>
-        <div id="minutes"></div>
-        <div id="seconds"></div>
+        <div class="time-unit" id="hours-unit" style="display: none;">
+            <div class="time-value" id="hours">00</div>
+            <div class="time-label">שעות</div>
+        </div>
+        <div class="separator" id="hours-separator" style="display: none;">:</div>
+        <div class="time-unit" id="minutes-unit">
+            <div class="time-value" id="minutes">00</div>
+            <div class="time-label">דקות</div>
+        </div>
+        <div class="separator">:</div>
+        <div class="time-unit" id="seconds-unit">
+            <div class="time-value" id="seconds">00</div>
+            <div class="time-label">שניות</div>
+        </div>
     </div>
 
     <div id="end" style="display: none;">
-        <h1>זמן יציאת הצום!</h1>
+        <h1>🎉 זמן יציאת הצום! 🎉</h1>
         <h4>
-            ׳לך אכול בשמחה לחמך׳ 😋
+            <span class="food-decoration">🍔</span>
+            לך אכול בשמחה לחמך
+            <span class="food-decoration">🍰</span>
         </h4>
     </div>
 
@@ -108,7 +439,7 @@
     <script>
         const now = new Date();
         init(
-            now.setHours(20, 6),
+            now.setHours(20, 11),
             false
         )
     </script>
